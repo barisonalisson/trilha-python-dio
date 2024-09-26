@@ -1,4 +1,4 @@
-from abc import ABC, abstractclassmethod, abstractproperty
+from abc import ABC, abstractmethod
 from datetime import datetime
 
 
@@ -59,7 +59,7 @@ class Conta:
         excedeu_saldo = valor > saldo
 
         if excedeu_saldo:
-            print("\n@@@ Operação falhou! Você não tem saldo suficiente. @@@")
+            print(f"Erro! Você não tem saldo suficiente, seu saldo atual é: R$ {saldo:.2f}.")
 
         elif valor > 0:
             self._saldo -= valor
@@ -67,7 +67,7 @@ class Conta:
             return True
 
         else:
-            print("\n@@@ Operação falhou! O valor informado é inválido. @@@")
+            print("\n Operação falhou! O valor informado é inválido. ")
 
         return False
 
@@ -76,7 +76,7 @@ class Conta:
             self._saldo += valor
             print("\n=== Depósito realizado com sucesso! ===")
         else:
-            print("\n@@@ Operação falhou! O valor informado é inválido. @@@")
+            print("\n Operação falhou! O valor informado é inválido. ")
             return False
 
         return True
@@ -97,10 +97,10 @@ class ContaCorrente(Conta):
         excedeu_saques = numero_saques >= self.limite_saques
 
         if excedeu_limite:
-            print("\n@@@ Operação falhou! O valor do saque excede o limite. @@@")
+           print(f"Erro! O valor do saque excede o limite, limite permitido: R$ {self.limite:.2f}.")
 
         elif excedeu_saques:
-            print("\n@@@ Operação falhou! Número máximo de saques excedido. @@@")
+            print(f"Erro! Número máximo de saques excedido. Máximo de saques é {self.limite_saques}.")
 
         else:
             return super().sacar(valor)
@@ -109,9 +109,9 @@ class ContaCorrente(Conta):
 
     def __str__(self):
         return f"""\
-            Agência:\t{self.agencia}
-            C/C:\t\t{self.numero}
-            Titular:\t{self.cliente.nome}
+            Agência:{self.agencia}
+            C/C:{self.numero}
+            Titular:{self.cliente.nome}
         """
 
 
@@ -127,7 +127,7 @@ class Historico:
         self._transacoes.append(
             {
                 "tipo": transacao.__class__.__name__,
-                "valor": transacao.valor,
+                "valor": f"R$ {transacao.valor:.2f}",
                 "data": datetime.now().strftime("%d-%m-%Y %H:%M:%s"),
             }
         )
@@ -135,11 +135,11 @@ class Historico:
 
 class Transacao(ABC):
     @property
-    @abstractproperty
+    @abstractmethod
     def valor(self):
         pass
 
-    @abstractclassmethod
+    @classmethod
     def registrar(self, conta):
         pass
 

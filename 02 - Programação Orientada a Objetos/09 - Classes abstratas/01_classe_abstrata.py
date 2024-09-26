@@ -11,7 +11,7 @@ class ControleRemoto(ABC):
         pass
 
     @property
-    @abstractproperty
+    @abstractmethod
     def marca(self):
         pass
 
